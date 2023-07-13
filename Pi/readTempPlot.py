@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 def parse_data(data):
-    """Parses the data in the format `2023-07-13 15:54;25.85°C`."""
+    # """Parses the data in the format `2023-07-13 15:54;25.85°C`."""
     date, temperature = data.split(";")
     date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M")
     temperature = temperature.strip("°C\n")
