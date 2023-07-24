@@ -3,4 +3,4 @@ all:
 	g++ -o fibEncode main.cpp
 
 install:
-	mv fibEncode /bin/fibEncode
+	sudo mv fibEncode /bin/fibEncode
