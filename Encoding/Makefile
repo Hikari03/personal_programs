@@ -1,5 +1,3 @@
 
-all: fibEncode
-
-fibEncode:
+all:
 	g++ -o fibEncode main.cpp

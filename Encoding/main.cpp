@@ -1,13 +1,9 @@
-
-#include <cstdio>
-#include <cstdlib>
 #include <cstring>
 #include <cstdint>
-#include <cassert>
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
+
 using namespace std;
 
 int fibArr[30] = { 1, 2, 3, 5, 8, 13, 21, 34
@@ -287,6 +283,7 @@ bool               utf8ToFibonacci                         ( const char      * i
             }
 
             rotateByte(binary);
+
             /*cout << "Rotated: ";
             for(int i = 0; i < sizeOfBinary + (sizeOfBinary % 8); i++)
             {
@@ -294,9 +291,9 @@ bool               utf8ToFibonacci                         ( const char      * i
                 cout << "|";
             cout << binary[i];
             }
-            cout << endl;*/
+            cout << endl;
 
-            //cout << "Char value: " << static_cast<int>(getCharFromByte(binary)) << endl;
+            cout << "Char value: " << static_cast<int>(getCharFromByte(binary)) << endl;*/
             output << getCharFromByte(binary); // outputs char into output file
             if(output.fail())
                 return false;
@@ -325,9 +322,9 @@ bool               utf8ToFibonacci                         ( const char      * i
                     cout << "|";
                 cout << binary[i];
             }
-            cout << endl;*/
+            cout << endl;
 
-            //cout << "Output: " << static_cast<int>(getCharFromByte(binary)) << endl;
+            cout << "Output: " << static_cast<int>(getCharFromByte(binary)) << endl;*/
             output << getCharFromByte(binary); // outputs char into output file
             if(output.fail())
                 return false;
@@ -755,9 +752,9 @@ bool               identicalFiles                          ( const char      * f
 
 int main ( int argc, char * argv [] ) {
 
-    if ( argc != 4 || strcmp(argv[1], "-h") == 0  ) {
-        cout << "Usage: fibEncode <mode> <input file> <output file>" << endl;
-        cout << "Modes: -e (encode), -d (decode), -c (compare)" << endl;
+    if ( argc < 4 || strcmp(argv[1], "-h") == 0  ) {
+        cout << "Usage: fibEncode <mode> [-b] <input file> <output file>" << endl;
+        cout << "Modes: -e (encode), -d (decode), -c (compare), -b (converting a binary file)" << endl;
         cout << "Example: fibEncode -e input.txt output.txt" << endl;
         cout << "Written by: David Houdek, 2023" << endl;
         return 1;
@@ -765,28 +762,56 @@ int main ( int argc, char * argv [] ) {
 
     // separate arguments
     string mode = argv[1];
-    const char *inputFile = argv[2];
-    const char *outputFile = argv[3];
+    string inputFile = argv[2];
+    string outputFile = argv[3];
+    bool binary = (strcmp(argv[2], "-b") == 0);
+
 
     if(mode == "-e")
     {
-        if(!utf8ToFibonacci(inputFile, outputFile))
+        if(binary){
+            inputFile = argv[3];
+            outputFile = argv[4];
+
+            system(("xxd "s + inputFile + ' ' + inputFile + ".tmp").data());
+
+            inputFile = (inputFile + ".tmp");
+            //cout << inputFile + ".tmp" << endl;
+            //cout << inputFile << endl;
+        }
+
+        if(!utf8ToFibonacci(inputFile.data(), outputFile.data()))
         {
             cerr << "Error while encoding" << endl;
+            if(binary)
+                system(("rm "s + inputFile).data());
             return 1;
         }
+        if(binary)
+                system(("rm "s + inputFile).data());
     }
     else if(mode == "-d")
     {
-        if(!fibonacciToUtf8(inputFile, outputFile))
+        if(binary){
+            inputFile = argv[3];
+            outputFile = argv[4];
+        }
+
+        if(!fibonacciToUtf8(inputFile.data(), outputFile.data()))
         {
             cerr << "Error while decoding" << endl;
             return 1;
         }
+
+        if(binary) {
+            system(("xxd -r "s + outputFile + ' ' + outputFile + ".tmp").data());
+            system(("rm "s + outputFile).data());
+            system(("mv "s + outputFile + ".tmp " + outputFile).data());
+        }
     }
     else if(mode == "-c")
     {
-        if(!identicalFiles(inputFile, outputFile))
+        if(!identicalFiles(inputFile.data(), outputFile.data()))
         {
             cerr << "Files are not identical" << endl;
             return 1;
