@@ -18,6 +18,7 @@ int pinger(const std::string & url) {
         handle.setOpt(writeStream);
         // timeout after 1 second
         handle.setOpt<ConnectTimeout>(1);
+        handle.setOpt<Timeout>(1);
         handle.perform();
         int responseCode;
         curlpp::InfoTypeConverter<int>::get(handle, CURLINFO_RESPONSE_CODE, responseCode);
@@ -84,9 +85,10 @@ int main()
     std::cout << "┗━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" << std::endl;
     // print indexes above returned values
 
-    std::cout << "┏━━━━━━━ << PING RESULTS >> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" << std::endl;
-    std::cout << "┃ Indexes:                                                                        ┃" << std::endl;
-    std::cout << "┃ \033[1;35m0\033[0;32m ┃ ┃ \033[1;35m1\033[0;32m ┃ ┃ \033[1;35m2\033[0;32m ┃ ┃ \033[1;35m3\033[0;32m ┃ ┃ \033[1;35m4\033[0;32m ┃ ┃ \033[1;35m5\033[0;32m ┃ ┃ \033[1;35m6\033[0;32m ┃ ┃ \033[1;35m7\033[0;32m ┃ "
+    std::cout << "┏━━━━━━━ << PING RESULTS >> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n"
+                 "┃ Indexes:                                                                        ┃\n"
+                 "┣━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┳━┳━━━┫\n"
+                 "┃ \033[1;35m0\033[0;32m ┃ ┃ \033[1;35m1\033[0;32m ┃ ┃ \033[1;35m2\033[0;32m ┃ ┃ \033[1;35m3\033[0;32m ┃ ┃ \033[1;35m4\033[0;32m ┃ ┃ \033[1;35m5\033[0;32m ┃ ┃ \033[1;35m6\033[0;32m ┃ ┃ \033[1;35m7\033[0;32m ┃ "
                  "┃ \033[1;35m8\033[0;32m ┃ ┃ \033[1;35m9\033[0;32m ┃ ┃ \033[1;35m10\033[0;32m┃ ┃ \033[1;35m11\033[0;32m┃ ┃ \033[1;35m12\033[0;32m┃ ┃ \033[1;35m13\033[0;32m┃" << std::endl;
 
 
