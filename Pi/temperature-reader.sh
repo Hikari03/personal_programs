@@ -4,7 +4,7 @@ while :
 do
     sleep 300
     TEMP="$("$HOME/rpi-examples/LM75A/bash/lm75a.sh")"
-    if [[ -z "$var" ]]; then
+    if [[ -z "$TEMP" ]]; then
       continue
     fi
     RES=$TEMP
