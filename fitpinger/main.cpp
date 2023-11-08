@@ -18,6 +18,7 @@ int pinger(const std::string & url) {
         handle.setOpt(writeStream);
         // timeout after 1 second
         handle.setOpt<ConnectTimeout>(1);
+        handle.setOpt<Timeout>(1);
         handle.perform();
         int responseCode;
         curlpp::InfoTypeConverter<int>::get(handle, CURLINFO_RESPONSE_CODE, responseCode);
