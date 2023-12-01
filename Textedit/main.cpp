@@ -15,7 +15,15 @@
 File importFile( const std::string & fileName ) {
     File file(fileName);
 
-    std::ifstream inputFile(fileName);
+    std::ifstream inputFile;
+
+    inputFile.open(fileName);
+
+    if(!inputFile.is_open()) {
+        file.insertLine(Line(""));
+        file.setInitialSaveState(File::saveState::DOESNT_EXIST);
+        return file;
+    }
 
     std::string line;
 
@@ -25,6 +33,7 @@ File importFile( const std::string & fileName ) {
 
     inputFile.close();
 
+    file.setInitialSaveState(File::saveState::SAVED);
     return file;
 }
 
@@ -32,6 +41,7 @@ int getCharacter() {
     system("/bin/stty raw");
     int c = std::cin.get();
     system("/bin/stty cooked");
+    std::cout << RESET << std::flush;
     return c;
 }
 
@@ -44,17 +54,17 @@ int main( int argc, char * argv[] ) {
 
     std::string fileName = argv[1];
 
-    File file = importFile(fileName);
+    auto file = importFile(fileName);
 
     File::Mode & mode = file.getMode();
 
-    file.print();
 
     while(true) {
+        file.print();
         int c = getCharacter();
 
         if constexpr (DEBUG)
-            std::cout << GREEN << "----------------------\n"
+            std::cout << GREEN << "\n----------------------\n"
             << " Character: " << c << RESET << std::endl;
 
 
@@ -88,41 +98,75 @@ int main( int argc, char * argv[] ) {
                     default:
                         break;
                 }
-
-
         }
 
-        switch(c) {
-            case TAB: // escape key
-                return 0;
-            case BACKSPACE: // backspace key
-                file.backspace();
-                break;
-            case ENTER: // enter key
-                file.newLine();
-                break;
-            case UP_ARROW: // up arrow key
-                file.moveUp();
-                break;
-            case DOWN_ARROW: // down arrow key
-                file.moveDown();
-                break;
-            case RIGHT_ARROW: // right arrow key
-                file.moveRight();
-                break;
-            case LEFT_ARROW: // left arrow key
-                file.moveLeft();
-                break;
-            default:
-                if(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')
+        if(c == CTRL_C)
+            break;
+
+        if(mode == File::Mode::INSERT)
+            switch (c) {
+                case UP_ARROW:
+                    file.moveUp();
+                    break;
+                case DOWN_ARROW:
+                    file.moveDown();
+                    break;
+                case RIGHT_ARROW:
+                    file.moveRight();
+                    break;
+                case LEFT_ARROW:
+                    file.moveLeft();
+                    break;
+                case '`':
+                    file.changeMode(File::Mode::NORMAL);
+                    continue;
+                case BACKSPACE:
+                    file.backspace();
+                    break;
+                case ENTER:
+                    file.newLine();
+                    break;
+                default:
                     file.insert(static_cast<char>(c));
-                break;
-        }
+                    break;
+            }
+
+        if(mode == File::Mode::NORMAL)
+            switch (c) {
+                case UP_ARROW:
+                    file.moveUp();
+                    break;
+                case DOWN_ARROW:
+                    file.moveDown();
+                    break;
+                case RIGHT_ARROW:
+                    file.moveRight();
+                    break;
+                case LEFT_ARROW:
+                    file.moveLeft();
+                    break;
+                case 'i':
+                    file.changeMode(File::Mode::INSERT);
+                    break;
+                case 'w':
+                    file.save();
+                    break;
+                case 'q':
+                    std::cout << BG_RED << "\nAre you sure you want to quit? (y/N)" << RESET << std::endl;
+                    char c;
+                    c = getCharacter();
+                    if(c == 'y' || c == 'Y')
+                        return 0;
+                    continue;
+                case 'd':
+                    file.removeLine();
+                    break;
+                default:
+                    break;
+            }
 
         if constexpr (DEBUG)
             std::cout << GREEN << "----------------------" << RESET << std::endl;
-
-        file.print();
     }
 }
 

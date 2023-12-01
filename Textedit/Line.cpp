@@ -83,3 +83,12 @@ void Line::setCurrentCharacterIndex(unsigned int index) {
     else
         currentCharacterIndex = characters.size();
 }
+
+const std::string & Line::exportLine() {
+    return characters;
+}
+
+void Line::clear() {
+    characters.clear();
+    currentCharacterIndex = 0;
+}

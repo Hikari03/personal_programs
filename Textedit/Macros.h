@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG 1
+#define DEBUG 0
 
 //foreground colors
 #define GREEN "\033[32m"
@@ -38,3 +38,4 @@
 #define ENTER 13
 #define ESCAPE 27
 #define TAB 9
+#define CTRL_C 3

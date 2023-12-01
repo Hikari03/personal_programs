@@ -14,6 +14,7 @@ public:
 
     void insert(char c);
     void remove();
+    void clear();
     void moveLeft();
     void moveRight();
     unsigned int getCurrentCharacterIndex();
@@ -22,6 +23,7 @@ public:
     void print(bool selected = false);
 
     void insertLine(Line &line);
+    const std::string & exportLine();
 
     std::string charsAfterCurrentSelection();
 
