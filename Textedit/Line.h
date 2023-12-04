@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "Macros.h"
 
 class Line {
 
