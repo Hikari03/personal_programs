@@ -45,14 +45,14 @@ void Line::print(bool selected) {
         // else print it normally
 
         if(selected && currentCharacterIndex == &character - &characters[0]) {
-            std::cout << "\033[1;41m" << character << "\033[0m";
+            std::cout << BG_WHITE << character << RESET;
         }
         else
             std::cout << character;
     }
 
     if(selected && currentCharacterIndex == characters.size())
-        std::cout << "\033[1;41m" << " " << "\033[0m";
+        std::cout << BG_WHITE << " " << RESET;
     else
         std::cout << " ";
 

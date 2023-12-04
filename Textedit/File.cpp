@@ -10,6 +10,7 @@ Line & File::currentLine() {
     return lines[currentLineIndex];
 }
 
+
 void File::moveUp() {
     if(currentLineIndex > 0) {
         unsigned int idx = currentLine().getCurrentCharacterIndex();

@@ -12,6 +12,11 @@
  * The user can also use the escape key to exit the program.
  * */
 
+/**
+ * @brief Import a file
+ * @param fileName The file to import
+ * @return The imported file
+ */
 File importFile( const std::string & fileName ) {
     File file(fileName);
 
@@ -37,6 +42,10 @@ File importFile( const std::string & fileName ) {
     return file;
 }
 
+/**
+ * @brief Get a character from the console
+ * @return The character
+ */
 int getCharacter() {
     system("/bin/stty raw");
     int c = std::cin.get();

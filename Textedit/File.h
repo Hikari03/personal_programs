@@ -7,39 +7,108 @@ class File {
 public:
 
     explicit File(std::string fileName);
+
+    /**
+     * @brief Get the current line
+     * @return The current line
+     */
     Line & currentLine();
 
+    /**
+     * @brief Move the cursor up
+     */
     void moveUp();
+
+    /**
+     * @brief Move the cursor down
+     */
     void moveDown();
+
+    /**
+     * @brief Move the cursor left
+     */
     void moveLeft();
+
+    /**
+     * @brief Move the cursor right
+     */
     void moveRight();
 
+    /**
+     * @brief Insert a character at the current cursor position
+     * @param c The character to insert
+     */
     void insert(char c);
+
+    /**
+     * @brief Insert a line at the current cursor position
+     * @param line The line to insert
+     */
     void insertLine(const Line& line);
+
+    /**
+     * @brief Insert a line at the current cursor position
+     */
     void insertLine();
+
+    /**
+     * @brief Remove the current line
+     */
     void removeLine();
+
+    /**
+     * @brief Creates new line with the current line's characters after the cursor
+     */
     void newLine();
+
+    /**
+     * @brief Remove the character before the cursor
+     */
     void backspace();
 
+    /**
+     * @brief Save the file to disk
+     */
     void save();
 
-    // print the file to the screen
+    /**
+     * @brief Print the file to the console
+     */
     void print();
 
+    /**
+     * @brief Mode of the editor
+     */
     enum class Mode {
         NORMAL,
         INSERT
     };
 
+    /**
+     * @brief Change the mode of the editor
+     * @param mode The new mode
+     */
     void changeMode(Mode mode);
+
+    /**
+     * @brief Get the current mode of the editor, used only after initialization
+     * @return The current mode
+     */
     Mode & getMode();
 
+    /**
+     * @brief The save state of the file
+     */
     enum class saveState {
         DOESNT_EXIST,
         SAVED,
         NOT_SAVED
     };
 
+    /**
+     * @brief Get the save state of the file
+     * @return The save state
+     */
     void setInitialSaveState(saveState state);
 
 
