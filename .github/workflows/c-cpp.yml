@@ -14,8 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: build calc
-      run: make ./Calculator/Makefile
+      run: cd Calculator/Makefile; make
     - name: build fibEncode
-      run: make ./Encoding/Makefile
+      run: cd Encoding/Makefile; make
     - name: build Textedit
-      run: make ./Textedit/Makefile
+      run: cd Textedit/Makefile; make
