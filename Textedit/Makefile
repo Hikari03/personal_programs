@@ -9,7 +9,7 @@
 #     - *.o
 # - main
 
-TARGET := Textline
+TARGET := Textedit
 SOURCES := $(wildcard *.c *.cpp)
 OBJECTS := $(patsubst src%,obj%, $(patsubst %.c,%.o, $(patsubst %.cpp,%.o,$(SOURCES))))
 
