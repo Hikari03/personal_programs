@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: build calc
+      run: make ./Calculator/Makefile
+    - name: build fibEncode
+      run: make ./Encoding/Makefile
+    - name: build Textedit
+      run: make ./Textedit/Makefile
