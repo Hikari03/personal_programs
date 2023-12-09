@@ -1,38 +1,7 @@
-#include <cmath>
 #include <iostream>
 #include <vector>
 
-#include "DotsPermutations.h"
-#include "Calculator.cpp"
-
-/**
- * @brief Parses the input string and returns the quotient of x and constant
- */
-std::pair<int, int> inputParser(const std::vector<std::string> & input) {
-
-    int qOfX = input[0].at(0) - '0';
-
-    if(qOfX == 'x' - '0') {
-        qOfX = 1;
-    }
-
-    int constant = input[2].at(0) - '0';
-    constant *= input[1].at(0) == '-' ? -1 : 1;
-
-    return {qOfX, constant};
-}
-
-
-
-/*int findAllPowersOfTwo(const int number) {
-    int sum = 0;
-    for (int i = 0; i < 6; ++i) {
-        if (number & (1 << i)) {
-            sum += i+1;
-        }
-    }
-    return sum;
-}*/
+#include "Grapher.h"
 
 /*
  *| 1|  2|
@@ -41,33 +10,9 @@ std::pair<int, int> inputParser(const std::vector<std::string> & input) {
  *|64|128|
  */
 
-int main() {
-    //std::cout << dots.at(2+4+32+64) << std::endl;
+int main(int argc, char ** argv) {
 
-    std::vector<std::string> input = { {"2x"}, {"-"}, {"1"} };
-
-
-    auto [qOfX, constant] = inputParser(input);
-
-    int layer = 1;
-    for (int i = 0; i < 1; i+=2) {
-        int res = 0;
-        int tmp = i*qOfX + constant;
-
-        if(tmp <= layer*4 && tmp > (layer-1)*4) {
-            tmp = tmp - (layer-1)*4;
-            res = std::pow(2, (4-tmp)*2 );
-        }
-
-        tmp = (i+1)*qOfX + constant;
-        if(tmp <= layer*4 && tmp > (layer-1)*4) {
-            tmp = tmp - (layer-1)*4;
-            res += std::pow(2, ((4-tmp)*2)+1 );
-        }
-
-        std::cout << (res == 0 ? " " : dots.at(res)) << std::flush;
-    }
-
+    Grapher::printGraph(Grapher::graphFunction(argv[1], 10, 10));
 
     return 0;
 }
