@@ -9,6 +9,7 @@
  * And different positions are added together to get the correct index.
  */
 const std::map<int,std::string> dots = {
+        {0,   " "},
         {1,   "⠁"},
         {2,   "⠈"},
         {3,   "⠉"},
