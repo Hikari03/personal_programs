@@ -3,7 +3,7 @@
 ## Usage
 
 - `make` to compile
-- `./Grapher "<expression>"` to run
+- `./Grapher -h` for help
 
 ## Description
 
