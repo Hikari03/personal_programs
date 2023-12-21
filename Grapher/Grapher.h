@@ -1,10 +1,12 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <cmath>
 
 #include "DotsPermutations.h"
 #include "Calculator.h"
+#include "Graph.h"
+
+#define DEBUG false
 
 /**
  * @brief Graphs in braille
@@ -22,11 +24,12 @@ public:
      * @brief Graphs the input function in braille
      *
      * @param input The input function
+     * @param width The desired width of the graph
+     * @param height The desired height of the graph
      * @return The graph
      */
-    static std::vector<std::vector<std::string>> graphFunction(const std::string & input, int width, int height);
+    static Graph graphFunction(const std::string & input, int width, int height);
 
-    static void printGraph(const std::vector<std::vector<std::string>> & graph);
 
 private:
 
@@ -53,7 +56,7 @@ private:
      */
     static std::string findAndReplaceAll(const std::string & expression, char toReplace, const std::string& replaceWith);
 
-    static int calculateForX(const std::string & input, int x);
+    static double calculateForX(const std::string & input, int x);
 
     static std::pair<int, int> getDotIdxAndLayerForX(const std::string & input, int x, bool isFor2ndDot);
 

@@ -24,12 +24,12 @@ int Grapher::get2ndDot(const int number) {
     return static_cast<int>(std::pow(2, ((4-number)*2)+1 ));
 }
 
-std::vector<std::vector<std::string>>
-Grapher::graphFunction(const std::string & input, const int width, const int height) {
+Graph Grapher::graphFunction(const std::string & input, const int width, const int height) {
 
-    std::vector<std::vector<std::string>> graph(height, std::vector<std::string>(width, " "));
+    auto const calcWidth = width % 2 == 0 ? width : width-1;
 
-    auto calcWidth = width % 2 == 0 ? width : width-1;
+    Graph graph(height, width, 1, 1);
+
 
     for(int i = 0, idx = 0; i < calcWidth; i+=2, ++idx) {
 
@@ -37,47 +37,59 @@ Grapher::graphFunction(const std::string & input, const int width, const int hei
 
         auto [dot2, layer2] = getDotIdxAndLayerForX(input, i+1, true);
 
+        // Check if layer is < 0, because we only graph 1st quadrant
+        if(layer1 < 0 || layer2 < 0) {
+            continue;
+        }
+
         if(layer1 == layer2) {
             if(layer1 > height-1) {
                 continue;
             }
-            graph[layer1][idx] = dots.at(dot1+dot2);
+            graph.insertDot(layer1, idx, dots.at(dot1+dot2));
         } else {
             if(layer1 > height-1 || layer2 > height-1) {
                 continue;
             }
 
-            graph[layer1][idx] = dots.at(dot1);
-            graph[layer2][idx] = dots.at(dot2);
+            graph.insertDot(layer1, idx, dots.at(dot1));
+            graph.insertDot(layer2, idx, dots.at(dot2));
         }
     }
 
     return graph;
 }
 
-void Grapher::printGraph(const std::vector<std::vector<std::string>> &graph) {
-    for(int i = graph.size()-1; i >= 0; --i) {
-        for(const auto & dot : graph[i]) {
-            std::cout << dot;
-        }
-        std::cout << std::endl;
+
+double Grapher::calculateForX(const std::string &input, const int x) {
+    auto const inputString = findAndReplaceAll(input, 'x', std::to_string(x));
+
+    return Calculator::calculate(inputString);
+}
+
+std::pair<int, int> Grapher::getDotIdxAndLayerForX(const std::string &input, const int x, bool isFor2ndDot) {
+
+    if constexpr (DEBUG) {
+        std::cout << "Calculating for x: " << x << std::endl;
+    }
+    auto const calculated = calculateForX(input, x)+1;
+
+    if constexpr (DEBUG) {
+        std::cout << "Calculated: " << calculated << std::endl;
     }
 
-}
-
-int Grapher::calculateForX(const std::string &input, const int x) {
-    auto inputString = findAndReplaceAll(input, 'x', std::to_string(x));
-
-    return static_cast<int>(Calculator::calculate(inputString));
-}
-
-std::pair<int, int> Grapher::getDotIdxAndLayerForX(const std::string &input, int x, bool isFor2ndDot) {
-    auto calculated = calculateForX(input, x);
-    int layer = calculated/4;
-    if(calculated % 4 == 0 && layer != 0) {
+    int layer = std::abs(static_cast<int>(calculated))/4;
+    if(static_cast<int>(calculated) % 4 == 0 && layer != 0) {
         --layer;
     }
-    int dotIdx = isFor2ndDot ? get2ndDot(calculated - layer*4) : get1stDot(calculated - layer*4);
+
+    if(calculated < 0)
+        layer = -layer;
+
+    int dotIdx = 0;
+
+    if(calculated>=0)
+        dotIdx = isFor2ndDot ? get2ndDot(calculated - layer*4) : get1stDot(calculated - layer*4);
 
     return {dotIdx, layer};
 }
