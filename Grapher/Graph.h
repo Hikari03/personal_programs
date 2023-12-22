@@ -6,7 +6,7 @@
 
 class Graph {
 public:
-    Graph(int height, int width , double xScale, double yScale);
+    Graph(int absHeight, int width , double xScale, double yScale);
 
     Graph & operator = (const Graph & other);
 
@@ -20,6 +20,7 @@ private:
     double xScale = 1;
     double yScale = 1;
 
+    int absHeight;
     int height = 0;
     int width = 0;
 

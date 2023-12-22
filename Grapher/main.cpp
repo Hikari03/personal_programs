@@ -16,10 +16,12 @@
  *|64|128|
  */
 
-void interactiveMode(int width, int height) {
+void interactiveMode(const int width, const int height) {
     std::string expression;
     char inC;
     int lPar = 0, pPar = 0;
+
+    bool firstRun = true;
 
     Graph graph(1,1,1,1);
 
@@ -33,7 +35,9 @@ void interactiveMode(int width, int height) {
         std::cout << GREEN << "Expression: " << PURPLE << expression << std::flush;
         std::cout << GREEN << "\nResult: \n" << PURPLE;
 
-        graph.printGraph();
+        if (!firstRun)
+            graph.printGraph();
+        else firstRun = false;
 
         std::cout.flush();
 
