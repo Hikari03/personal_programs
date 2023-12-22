@@ -1,5 +1,7 @@
 #include "Grapher.h"
 
+#include <valarray>
+
 std::string Grapher::findAndReplaceAll(const std::string & expression, char toReplace, const std::string &replaceWith) {
     std::string expressionCopy = expression;
     size_t pos = expressionCopy.find(toReplace);
@@ -72,7 +74,7 @@ std::pair<int, int> Grapher::getDotIdxAndLayerForX(const std::string &input, con
     if constexpr (DEBUG) {
         std::cout << "Calculating for x: " << x << std::endl;
     }
-    auto const calculated = calculateForX(input, x)+1;
+    auto calculated = calculateForX(input, x)+1;
 
     if constexpr (DEBUG) {
         std::cout << "Calculated: " << calculated << std::endl;
@@ -83,8 +85,24 @@ std::pair<int, int> Grapher::getDotIdxAndLayerForX(const std::string &input, con
         --layer;
     }
 
-    if(calculated < 0)
+    if(calculated < 0) {
         layer = -layer;
+        switch (static_cast<int>(calculated) % 4) {
+            case 0: calculated += 3;
+                    break;
+            case 1: calculated += 1;
+                    break;
+            case 2: calculated -= 1;
+                    break;
+            case 3: calculated -= 3;
+                    break;
+            default:
+                throw std::logic_error("wtf");
+
+        }
+    }
+
+    calculated = std::abs(calculated);
 
     int dotIdx = 0;
 
