@@ -33,7 +33,7 @@ void Line::moveRight() {
     }
 }
 
-unsigned int Line::getCurrentCharacterIndex() {
+unsigned int Line::getCurrentCharacterIndex() const {
     return currentCharacterIndex;
 }
 

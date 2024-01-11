@@ -43,7 +43,7 @@ public:
      * @brief Get the current cursor position
      * @return The current cursor position
      */
-    unsigned int getCurrentCharacterIndex();
+    unsigned int getCurrentCharacterIndex() const;
 
     /**
      * @brief Set the current cursor position

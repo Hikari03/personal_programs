@@ -5,6 +5,10 @@
 #include <fstream>
 #include "Line.h"
 
+/**
+ * @class File
+ * @brief Represents a file in an editor
+ */
 class File {
 
 public:
@@ -32,19 +36,32 @@ public:
      */
     void moveLeft();
 
+
     /**
-     * @brief Move the cursor right
+     * @brief Move the cursor to the right
+     *
+     * This function moves the cursor to the right on the current line in the file.
+     * If the cursor is at the end of the line, it does nothing.
      */
     void moveRight();
 
+
     /**
-     * @brief Insert a character at the current cursor position
+     * @brief Insert a character at the current cursor position in the file.
+     *
+     * This function inserts a character at the current cursor position in the file.
+     * After insertion, if the file's save state is SAVED, it changes the save state to NOT_SAVED.
+     *
      * @param c The character to insert
      */
     void insert(char c);
 
+
     /**
-     * @brief Insert a line at the current cursor position
+     * @brief Inserts a line at the current cursor position in the file.
+     *
+     * This function inserts a line at the current cursor position in the file.
+     *
      * @param line The line to insert
      */
     void insertLine(const Line& line);
