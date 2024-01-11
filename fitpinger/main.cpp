@@ -7,6 +7,18 @@
 
 using namespace curlpp::options;
 
+void clear() {
+    #if defined _WIN32
+        system("cls");
+        //clrscr(); // including header file : conio.h
+    #elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
+        system("clear");
+        //std::cout<< u8"\033[2J\033[1;1H"; //Using ANSI Escape Sequences
+    #elif defined (__APPLE__)
+        system("clear");
+    #endif
+}
+
 int pinger(const std::string & url) {
     try {
         //curlpp::Cleanup myCleanup;
@@ -47,42 +59,74 @@ int main()
                                      "https://fit-wiki.cz", "https://houdeda2.cz"};
 
     //store previous state of ping results for each url in time
-    std::map<std::string, std::vector<int>> previousResults;
 
-    /*for(auto & url : urls) {
-        int value = pinger(url);
-        std::cout << "Response code from " + url +  ": ";
-        if (value == 200 || value == 301 || value == 302 || value == 303) {
-            std::cout << "\033[1;32m" << value << "\033[0m" << std::endl;
-        } else {
-            std::cout << "\033[1;31m" << value << "\033[0m" << std::endl;
-        }
-    }*/
+    const int backlogSize = 20;
+    std::vector<std::vector<bool>> results;
+    results.assign(urls.size(), std::vector<bool>(backlogSize));
+
 
     // purple: \033[1;35m
     std::cout << "\033[0;32m";
     // print urls with indexes
-    std::cout << "┏━━┳━━━━ << URLS >> ━━━━━━━━━━━━━━━━━┓" << std::endl;
-    for (int i = 0; i < urls.size(); i++) {
-        std::cout << "┃";
-        if (i < 10) {
-            std::cout << i << " ┃ " << urls[i];
-            // dynamically add spaces to align urls
-            for (int j = 0; j < 32 - urls[i].length(); j++) {
-                std::cout << " ";
-            }
-        }
-        else {
-            std::cout << i << "┃ " << urls[i];
+    while(true) {
 
-            // dynamically add spaces to align urls
-            for (int j = 0; j < 32 - urls[i].length(); j++) {
-                std::cout << " ";
+        for(int i = 0; i < urls.size(); ++i) {
+            int value = pinger(urls[i]);
+
+            bool isOk = false;
+            if (value == 200 || value == 301 || value == 302 || value == 303) {
+                isOk = true;
+            }
+
+            // add result to backlog
+            results[i].insert(results[i].begin(), isOk);
+            // remove oldest result from backlog if bigger than backlog size
+
+            if (results[i].size() > backlogSize) {
+                results[i].pop_back();
             }
         }
-        std::cout << "┃" << std::endl;
+
+        clear();
+
+        std::cout << "┏━━┳━━━━ << URLS >> ━━━━━━━━━━━━━━━━━┓" << std::endl;
+        for (int i = 0; i < urls.size(); i++) {
+            std::cout << "\033[0;32m";
+
+            std::cout << "┃";
+            if (i < 10)/* index is one digit*/ {
+                std::cout << i << " ┃ " << urls[i];
+                // dynamically add spaces to align urls
+                for (int j = 0; j < 32 - urls[i].length(); j++) {
+                    std::cout << " ";
+                }
+            } else {
+                std::cout << i << "┃ " << urls[i];
+
+                // dynamically add spaces to align urls
+                for (int j = 0; j < 32 - urls[i].length(); j++) {
+                    std::cout << " ";
+                }
+            }
+            std::cout << "┃";
+
+
+
+            // print backlog
+            for (auto result: results[i]) {
+                if (result) {
+                    std::cout << "\033[1;32m ┃\033[0m";
+                } else {
+                    std::cout << "\033[1;31m ┃\033[0m";
+                }
+            }
+
+            std::cout << std::endl;
+
+        }
+        std::cout << "\033[0;32m┗━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
-    std::cout << "┗━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" << std::endl;
     // print indexes above returned values
 
     std::cout << "┏━━━━━━━ << PING RESULTS >> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n"
