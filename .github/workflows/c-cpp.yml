@@ -19,3 +19,5 @@ jobs:
       run: cd Encoding; make
     - name: build Textedit
       run: cd Textedit; make
+    - name: build Grapher
+      run: cd Grapher; make
