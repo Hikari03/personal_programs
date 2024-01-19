@@ -36,7 +36,7 @@ void Graph::printGraph() const {
     for(int i = absHeight-1; i >= absHeight-height+1; --i) {
         std::cout << i*4*static_cast<int>(yScale) << "_";
         auto const legend = std::to_string(i*4*static_cast<int>(yScale));
-        for(int j = 0; j < 5-legend.size(); ++j) {
+        for(long unsigned int j = 0; j < 5-legend.size(); ++j) {
             std::cout << " ";
         }
 

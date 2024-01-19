@@ -48,7 +48,7 @@ int main() {
                  RED "SIN: " GREEN "sin saved result\n"
                  RED "COS: " GREEN "cos saved result\n"
                  RED "s:" GREEN " save result\n"
-                 RED "e:" GREEN " erase last character\n"
+                 RED "backspace:" GREEN " erase last character\n"
                  RED "q:" GREEN " quit\n\n"
                  PURPLE "You can also use 'X' as placeholder for saved answer, however it will be rounded to nearest whole number\n"
                  RED "Permitted operators: " GREEN "+ - * / ^ ( )" RESET << std::endl;
@@ -58,7 +58,7 @@ int main() {
         std::cout << GREEN "Result: " BLUE << res << RESET << std::endl;
         std::cout << GREEN << "Expression: " << PURPLE << expression << std::flush;
         system("/bin/stty raw");
-        std::cin >> inC;
+        inC = std::cin.get();
         system("/bin/stty cooked");
         std::cout << RESET << std::flush;
 
@@ -69,7 +69,7 @@ int main() {
                 saved = true;
                 savedRes = res;
                 break;
-            case 'e':
+            case 127: // backspace
                 if( !expression.empty() )
                 expression.pop_back();
                 break;
