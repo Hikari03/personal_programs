@@ -104,7 +104,7 @@ std::pair<int, int> Grapher::getDotIdxAndLayerForX(const std::string &input, con
 
     int dotIdx = 0;
 
-    dotIdx = isFor2ndDot ? get2ndDot(calculated - std::abs(layer)*4) : get1stDot(calculated - std::abs(layer)*4);
+    dotIdx = isFor2ndDot ? get2ndDot(static_cast<int>(calculated) - std::abs(layer)*4) : get1stDot(static_cast<int>(calculated) - std::abs(layer)*4);
 
     if(neg)
         layer--;
