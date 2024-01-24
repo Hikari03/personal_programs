@@ -8,14 +8,14 @@
 class ColorTile : public Tile {
 
 public:
-    ColorTile() = default;
+    ColorTile();
     ColorTile(const ColorTile & other) = default;
 
     void setColor(int color);
 
     [[nodiscard]] int getColor() const;
 
-    void print(int x, int y) const override;
+    void print(unsigned x, unsigned y) const override;
 
 private:
     int color = 0;

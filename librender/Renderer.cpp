@@ -1,27 +1,11 @@
 #include "Renderer.h"
 
-Renderer::Renderer(std::vector<std::vector<std::shared_ptr<Tile>>> & tiles_, unsigned width_, unsigned height_) : tiles(tiles_) {
+Renderer::Renderer(Tiles & tiles_) : tiles(tiles_.tiles), width(tiles_.width), height(tiles_.height) {
     setlocale(LC_CTYPE,"");
 
-    width = width_;
-    height = height_;
-
-    tiles.resize(height);
-    for(int i = 0; i < height; i++) {
-        tiles[i].resize(width);
-    }
-
     prevTiles.resize(height);
-    for(int i = 0; i < height; i++) {
-        prevTiles[i].resize(width);
-    }
-
     for(unsigned int i = 0; i < height; i++) {
-        for(unsigned int j = 0; j < width; j++) {
-            std::shared_ptr<Tile> tile = std::make_shared<Tile>();
-            tile->setChar(L' ');
-            tiles[i][j] = tile;
-        }
+        prevTiles[i].resize(width);
     }
 
     for(unsigned int i = 0; i < height; i++) {
@@ -39,6 +23,13 @@ Renderer::Renderer(std::vector<std::vector<std::shared_ptr<Tile>>> & tiles_, uns
     noecho();
     keypad(stdscr, true);
     //resize_term(height, width);
+
+    start_color();
+    init_pair(1, COLOR_GREEN, COLOR_BLACK);
+    init_pair(2, COLOR_RED, COLOR_BLACK);
+    init_pair(3, COLOR_BLUE, COLOR_BLACK);
+    init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
+
     refresh();
 }
 
@@ -48,8 +39,8 @@ void Renderer::print() {
     std::shared_ptr<Tile> tile;
     bool changed = false;
 
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
+    for(unsigned int i = 0; i < height; i++) {
+        for(unsigned int j = 0; j < width; j++) {
             tile = tiles[i][j];
 
             if(tile->getChar() != prevTiles[i][j]->getChar()) {
@@ -66,10 +57,9 @@ void Renderer::print() {
 }
 
 void Renderer::copyTiles() {
-    //prevTiles = tiles; is shallow copy
 
     prevTiles.resize(height);
-    for(int i = 0; i < height; i++) {
+    for(unsigned i = 0; i < height; i++) {
         prevTiles[i].resize(width);
     }
 
@@ -86,3 +76,27 @@ void Renderer::copyTiles() {
     }
 
 }
+
+Renderer::~Renderer() {
+    endwin();
+}
+
+short Renderer::initColor(short foreground, short background, std::optional<short> index_) {
+    if(foreground > 255 || background > 255)
+        throw std::out_of_range("initColor: Color index out of range: " + std::to_string(foreground) + ", " + std::to_string(background));
+
+    short index = 0;
+    if(index_.has_value()) {
+        index = index_.value();
+    }
+    else {
+        index = static_cast<short>(colorPairs.size()+1);
+    }
+
+    colorPairs[index] = std::make_pair(foreground, background);
+    init_pair(index, foreground, background);
+
+    return index;
+}
+
+

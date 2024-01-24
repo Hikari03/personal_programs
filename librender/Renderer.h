@@ -1,7 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include "Tile.h"
+#include "ColorTile.h"
+#include "Tiles.h"
 
 /**
  * @brief Used for rendering
@@ -11,9 +14,12 @@
  */
 class Renderer {
 public:
-    explicit Renderer(std::vector<std::vector<std::shared_ptr<Tile>>> & tiles, unsigned width_, unsigned height_);
+    explicit Renderer(Tiles & tiles_);
+    ~Renderer();
 
     void print();
+
+    [[nodiscard]] short initColor(short foreground, short background, std::optional<short> index = std::nullopt);
 
 private:
 
@@ -21,6 +27,9 @@ private:
 
     std::vector<std::vector<std::shared_ptr<Tile>>> & tiles;
     std::vector<std::vector<std::shared_ptr<Tile>>> prevTiles;
+
+            //index         foreground, background
+    std::map<short, std::pair<short, short>> colorPairs;
 
     unsigned int width = 0;
     unsigned int height = 0;
