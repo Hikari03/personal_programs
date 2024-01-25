@@ -20,8 +20,16 @@ public:
 
     [[nodiscard]] const wchar_t & getChar() const;
 
-    virtual void print(int x, int y) const;
+    virtual void print(unsigned x, unsigned y) const;
+
+    enum class Type {
+        Tile,
+        ColorTile
+    };
+
+    [[nodiscard]] Type getType() const;
 
 protected:
     wchar_t ch = L' ';
+    Type tileType = Type::Tile;
 };

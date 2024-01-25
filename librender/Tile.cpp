@@ -12,6 +12,10 @@ const wchar_t & Tile::getChar() const {
     return ch;
 }
 
-void Tile::print(int x, int y) const {
-    mvprintw(x, y, "%lc", ch);
+void Tile::print(unsigned x, unsigned y) const {
+    mvprintw(static_cast<int>(x), static_cast<int>(y), "%lc", ch);
+}
+
+Tile::Type Tile::getType() const {
+    return tileType;
 }
