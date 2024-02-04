@@ -22,6 +22,7 @@ Renderer::Renderer(Tiles & tiles_) : tiles(tiles_.tiles), width(tiles_.width), h
     curs_set(0);
     noecho();
     keypad(stdscr, true);
+    keypad(stdscr, true);
     //resize_term(height, width);
 
     start_color();
@@ -43,7 +44,7 @@ void Renderer::print() {
         for(unsigned int j = 0; j < width; j++) {
             tile = tiles[i][j];
 
-            if(tile->getChar() != prevTiles[i][j]->getChar()) {
+            if(tiles[i][j]->updated()) {
                 tile->print(i, j);
                 changed = true;
             }
@@ -83,7 +84,7 @@ Renderer::~Renderer() {
 
 short Renderer::initColor(short foreground, short background, std::optional<short> index_) {
     if(foreground > 255 || background > 255)
-        throw std::out_of_range("initColor: Color index out of range: " + std::to_string(foreground) + ", " + std::to_string(background));
+        throw std::out_of_range("initColor: Color value out of range: " + std::to_string(foreground) + ", " + std::to_string(background));
 
     short index = 0;
     if(index_.has_value()) {

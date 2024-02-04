@@ -50,7 +50,7 @@ std::shared_ptr<Tile> & Tiles::setColor(unsigned int x, unsigned int y, int colo
 
 
     if(tiles[y][x]->getType() == Tile::Type::ColorTile) {
-        std::static_pointer_cast<ColorTile>(tiles[y][x])->setColor(color);
+        tiles[y][x]->setColor(color);
     } else {
         std::shared_ptr<ColorTile> tile = std::make_shared<ColorTile>();
         tile->setChar(tiles[y][x]->getChar());

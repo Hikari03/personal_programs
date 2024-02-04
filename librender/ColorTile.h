@@ -11,12 +11,13 @@ public:
     ColorTile();
     ColorTile(const ColorTile & other) = default;
 
-    void setColor(int color);
+    void setColor(int color) override;
 
-    [[nodiscard]] int getColor() const;
+    [[nodiscard]] int getColor() const override;
 
-    void print(unsigned x, unsigned y) const override;
+    void print(unsigned x, unsigned y) override;
 
 private:
     int color = 0;
+    Type tileType = Type::ColorTile;
 };

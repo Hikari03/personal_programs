@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <ncurses.h>
+#include <iostream>
 
 using namespace std;
 
@@ -20,7 +21,13 @@ public:
 
     [[nodiscard]] const wchar_t & getChar() const;
 
-    virtual void print(unsigned x, unsigned y) const;
+    virtual void setColor(int color){std::cout << "setColor called on Tile" << std::endl;};
+
+    [[nodiscard]] virtual int getColor() const {return 0;};
+
+    [[nodiscard]] bool updated() const;
+
+    virtual void print(unsigned x, unsigned y);
 
     enum class Type {
         Tile,
@@ -32,4 +39,5 @@ public:
 protected:
     wchar_t ch = L' ';
     Type tileType = Type::Tile;
+    bool _updated = true;
 };
