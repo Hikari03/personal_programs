@@ -18,6 +18,6 @@ public:
     void print(unsigned x, unsigned y) override;
 
 private:
-    int color = 0;
+    int _color = 0;
     Type tileType = Type::ColorTile;
 };

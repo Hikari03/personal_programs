@@ -1,5 +1,7 @@
 #pragma once
 
+#define color short
+
 #include <vector>
 #include <memory>
 #include <optional>
@@ -21,7 +23,11 @@ public:
 
     std::shared_ptr<Tile> getTile(unsigned x, unsigned y);
 
-    std::shared_ptr<Tile> & setColor(unsigned x, unsigned y, int color);
+    std::shared_ptr<Tile> & setColor(unsigned x, unsigned y, int _color);
+
+    void insertRect(unsigned x_s, unsigned y_s, unsigned x_e, unsigned y_e, wchar_t c = L' ', std::optional<color> _color = std::nullopt);
+
+    void insertBox(unsigned x_s, unsigned y_s, unsigned x_e, unsigned y_e, std::optional<color> _color = std::nullopt);
 
     void clear();
 
