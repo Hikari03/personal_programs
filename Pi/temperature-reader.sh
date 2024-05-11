@@ -2,14 +2,14 @@
 
 while :
 do
-    sleep 300
-    TEMP="$("$HOME/rpi-examples/LM75A/bash/lm75a.sh")"
+    TEMP="$("/home/hikari/rpi-examples/LM75A/bash/lm75a.sh")"
     if [[ -z "$TEMP" ]]; then
-      continue
+      	echo "couldnt read temperature"
+	continue
     fi
     RES=$TEMP
     RES+='°C'
-    echo "$RES" > ~/FTP/share/www/assets/temperature.txt
-    echo "$(date +"%F %R");$RES" >> ~/temperature-plot.txt
-   
+    echo "$RES" > /home/hikari/FTP/share/www/assets/temperature.txt
+    echo "$(date +"%F %R");$RES" >> /home/hikari/temperature-plot.txt
+    sleep 300
 done
