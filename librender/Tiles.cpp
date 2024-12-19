@@ -99,6 +99,7 @@ void Tiles::insertRect(unsigned int x_s, unsigned int y_s, unsigned int x_e, uns
         }
     }
 }
+
 /**
  * @brief prints a box on the screen
  * @details ┏━┓\n
@@ -110,7 +111,7 @@ void Tiles::insertRect(unsigned int x_s, unsigned int y_s, unsigned int x_e, uns
  * @param y_e
  * @param _color
  */
-void Tiles::insertBox(unsigned int x_s, unsigned int y_s, unsigned int x_e, unsigned int y_e, std::optional<short> _color) {
+void Tiles::insertBox(unsigned int x_s, unsigned int y_s, unsigned int x_e, unsigned int y_e, bool clear, std::optional<short> _color) {
 
     if(x_s > x_e || y_s > y_e)
         throw std::invalid_argument("insertBox: Invalid box coordinates");
@@ -145,6 +146,10 @@ void Tiles::insertBox(unsigned int x_s, unsigned int y_s, unsigned int x_e, unsi
                     tiles[i][j] = std::make_shared<Tile>();
                     tiles[i][j]->setChar(L'┃');
                 }
+				else if(clear) {
+					tiles[i][j] = std::make_shared<Tile>();
+					tiles[i][j]->setChar(L' ');
+				}
             }
         }
     }
@@ -152,22 +157,55 @@ void Tiles::insertBox(unsigned int x_s, unsigned int y_s, unsigned int x_e, unsi
         for (unsigned int i = y_s; i <= y_e; i++) {
             for (unsigned int j = x_s; j <= x_e; j++) {
                 std::shared_ptr<ColorTile> tile = std::make_shared<ColorTile>();
+                tile->setColor(_color.value());
                 if (i == y_s && j == x_s) {
                     tile->setChar(L'┏');
+                    tiles[i][j] = tile;
                 } else if (i == y_s && j == x_e) {
                     tile->setChar(L'┓');
+                    tiles[i][j] = tile;
                 } else if (i == y_e && j == x_s) {
                     tile->setChar(L'┗');
+                    tiles[i][j] = tile;
                 } else if (i == y_e && j == x_e) {
                     tile->setChar(L'┛');
+                    tiles[i][j] = tile;
                 } else if (i == y_s || i == y_e) {
                     tile->setChar(L'━');
+                    tiles[i][j] = tile;
                 } else if (j == x_s || j == x_e) {
                     tile->setChar(L'┃');
+                    tiles[i][j] = tile;
                 }
-                tile->setColor(_color.value());
-                tiles[i][j] = tile;
+				else if(clear) {
+					tile->setChar(L' ');
+					tiles[i][j] = tile;
+				}
             }
         }
     }
 }
+
+void Tiles::insertText(unsigned int x, unsigned int y, std::wstring text, std::optional<short> _color) {
+
+        if(x + text.length() > width-1 || y > height-1)
+            throw std::out_of_range("insertText: Text coordinates out of range");
+
+        if(!_color.has_value()) {
+            for(unsigned int i = 0; i < text.length(); i++) {
+                tiles[y][x + i] = std::make_shared<Tile>();
+                tiles[y][x + i]->setChar(text[i]);
+            }
+        }
+        else {
+            for(unsigned int i = 0; i < text.length(); i++) {
+                std::shared_ptr<ColorTile> tile = std::make_shared<ColorTile>();
+                tile->setChar(text[i]);
+                tile->setColor(_color.value());
+                tiles[y][x + i] = tile;
+            }
+        }
+
+}
+
+

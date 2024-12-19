@@ -23,7 +23,6 @@ public:
 
 private:
 
-
     std::vector<std::vector<std::shared_ptr<Tile>>> & tiles;
 
             //index         foreground, background
