@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# prints all 8-bit colors with encoding
+
+for colour in {1..225}
+    do echo -en "\033[38;5;${colour}m38;5;${colour} \n"
+done | column -x
+
