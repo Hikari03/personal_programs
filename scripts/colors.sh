@@ -2,7 +2,7 @@
 
 # prints all 8-bit colors with encoding
 
-for colour in {1..225}
-    do echo -en "\033[38;5;${colour}m38;5;${colour} \n"
+for color in {1..225}
+    do echo -en "\033[38;5;${color}m38;5;${color} \n"
 done | column -x
 
